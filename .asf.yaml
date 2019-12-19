@@ -16,8 +16,8 @@
 #
 # see https://s.apache.org/asfyaml
 github:
-  description: "Apache Maven Clean Plugin"
-  homepage: https://maven.apache.org/plugins/maven-clean-plugin/
+  description: "Apache Maven ACR Plugin"
+  homepage: https://maven.apache.org/plugins/maven-acr-plugin/
   labels:
     - java
     - build-management
