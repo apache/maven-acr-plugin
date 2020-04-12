@@ -22,5 +22,5 @@ github:
     - java
     - build-management
     - maven-plugins
-    - maven-clean-plugin
+    - maven-acr-plugin
     - maven
