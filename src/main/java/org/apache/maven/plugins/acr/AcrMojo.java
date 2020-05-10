@@ -52,11 +52,9 @@ import org.codehaus.plexus.util.FileUtils;
  *
  * @author <a href="pablo@anahata-it.com">Pablo Rodriguez</a>
  * @author <a href="snicoll@apache.org">Stephane Nicoll</a>
- * @version $Id:
  */
-// CHECKSTYLE_OFF: LineLength
-@Mojo( name = "acr", requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true, defaultPhase = LifecyclePhase.PACKAGE )
-// CHECKSTYLE_ON: LineLength
+@Mojo( name = "acr", requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true,
+                defaultPhase = LifecyclePhase.PACKAGE )
 public class AcrMojo
     extends AbstractMojo
 {
@@ -117,7 +115,7 @@ public class AcrMojo
     private JarArchiver jarArchiver;
 
     /**
-     * The archive configuration to use. See <a href="http://maven.apache.org/shared/maven-archiver/index.html">Maven
+     * The archive configuration to use. See <a href="https://maven.apache.org/shared/maven-archiver/index.html">Maven
      * Archiver Reference</a>.
      */
     @Parameter
@@ -162,6 +160,16 @@ public class AcrMojo
     @Parameter( defaultValue = "${session}", readonly = true, required = true )
     private MavenSession session;
 
+    /**
+     * Timestamp for reproducible output archive entries, either formatted as ISO 8601
+     * <code>yyyy-MM-dd'T'HH:mm:ssXXX</code> or as an int representing seconds since the epoch (like
+     * <a href="https://reproducible-builds.org/docs/source-date-epoch/">SOURCE_DATE_EPOCH</a>).
+     *
+     * @since 3.2.0
+     */
+    @Parameter( defaultValue = "${project.build.outputTimestamp}" )
+    private String outputTimestamp;
+
     /** {@inheritDoc} */
     public void execute()
         throws MojoExecutionException
@@ -178,7 +186,12 @@ public class AcrMojo
 
         archiver.setArchiver( jarArchiver );
 
+        archiver.setCreatedBy( "Maven ACR Plugin", "org.apache.maven.plugins", "maven-acr-plugin" );
+
         archiver.setOutputFile( jarFile );
+
+        // configure for Reproducible Builds based on outputTimestamp value
+        archiver.configureReproducible( outputTimestamp );
 
         try
         {
