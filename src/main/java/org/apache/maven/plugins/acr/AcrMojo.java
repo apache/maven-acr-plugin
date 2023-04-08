@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.XmlStreamReader;
 import org.apache.maven.archiver.MavenArchiveConfiguration;
 import org.apache.maven.archiver.MavenArchiver;
@@ -200,7 +199,7 @@ public class AcrMojo
             if ( excludes != null && !excludes.isEmpty() )
             {
                 excludes.add( APP_CLIENT_XML );
-                mainJarExcludes = excludes.toArray( new String[excludes.size()] );
+                mainJarExcludes = excludes.toArray( new String[0] );
             }
 
             if ( outputDirectory.exists() )
@@ -295,18 +294,9 @@ public class AcrMojo
     private String getEncoding( File xmlFile )
         throws IOException
     {
-        XmlStreamReader xmlReader = null;
-        try
+        try ( XmlStreamReader xmlReader = new XmlStreamReader( xmlFile ) )
         {
-            xmlReader = new XmlStreamReader( xmlFile );
-            final String encoding = xmlReader.getEncoding();
-            xmlReader.close();
-            xmlReader = null;
-            return encoding;
-        }
-        finally
-        {
-            IOUtils.closeQuietly( xmlReader );
+            return xmlReader.getEncoding();
         }
     }
 }
