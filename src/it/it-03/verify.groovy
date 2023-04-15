@@ -17,40 +17,33 @@
  * under the License.
  */
 
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-import java.util.regex.*;
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
 
-File jarFile = new File( basedir, "target/maven-acr-plugin-it03-1.0.jar" );
-System.out.println( "Checking for existence of " + jarFile );
-if ( !jarFile.isFile() )
-{
-    throw new FileNotFoundException( "Missing " + jarFile );
+var jarFile = new File(basedir, "target/maven-acr-plugin-it03-1.0.jar")
+println "Checking for existence of $jarFile"
+if (!jarFile.isFile()) {
+    throw new FileNotFoundException("Missing " + jarFile)
 }
 
-ZipInputStream zis = new ZipInputStream( new FileInputStream( jarFile ) );
+var zis = new ZipInputStream(new FileInputStream(jarFile))
 
-int count = 0;
+int count = 0
 
-while (true)
-{
-    ZipEntry entry = zis.getNextEntry();
-    if ( entry == null )
-    {
-        break;
+while (true) {
+    var entry = zis.getNextEntry()
+    if (entry == null) {
+        break
     }
-    if ( entry.getName().equals( "META-INF/application-client.xml" ) )
-    {
-        count++;
+    if (entry.getName().equals("META-INF/application-client.xml")) {
+        count++
     }
 }
 
-zis.close();
+zis.close()
 
-if ( count != 1 )
-{
-    throw new IllegalStateException( "Wrong number of application-client.xml's in archive: " + count );
+if (count != 1) {
+    throw new IllegalStateException("Wrong number of application-client.xml's in archive: " + count)
 }
 
-return true;
+return true
