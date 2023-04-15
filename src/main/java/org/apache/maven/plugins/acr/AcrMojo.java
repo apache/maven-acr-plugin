@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.acr;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.acr;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.acr;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,23 +51,24 @@ import org.codehaus.plexus.util.FileUtils;
  * @author <a href="pablo@anahata-it.com">Pablo Rodriguez</a>
  * @author <a href="snicoll@apache.org">Stephane Nicoll</a>
  */
-@Mojo( name = "acr", requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true,
-                defaultPhase = LifecyclePhase.PACKAGE )
-public class AcrMojo
-    extends AbstractMojo
-{
+@Mojo(
+        name = "acr",
+        requiresDependencyResolution = ResolutionScope.RUNTIME,
+        threadSafe = true,
+        defaultPhase = LifecyclePhase.PACKAGE)
+public class AcrMojo extends AbstractMojo {
 
     private static final String APP_CLIENT_XML = "META-INF/application-client.xml";
 
     // TODO: will null work instead?
-    private static final String[] DEFAULT_INCLUDES = { "**/**" };
+    private static final String[] DEFAULT_INCLUDES = {"**/**"};
 
-    private static final String[] DEFAULT_EXCLUDES = { APP_CLIENT_XML };
+    private static final String[] DEFAULT_EXCLUDES = {APP_CLIENT_XML};
 
     /**
      * The directory for the generated jar.
      */
-    @Parameter( defaultValue = "${project.build.directory}", required = true, readonly = true )
+    @Parameter(defaultValue = "${project.build.directory}", required = true, readonly = true)
     private File basedir;
 
     /**
@@ -76,25 +76,25 @@ public class AcrMojo
      * Starting with <b>3.0.0</b> the property has been renamed from <code>outputDirectory</code> to
      * <code>maven.acr.outputDirectory</code>.
      */
-    @Parameter( property = "maven.acr.outputDirectory", defaultValue = "${project.build.outputDirectory}" )
+    @Parameter(property = "maven.acr.outputDirectory", defaultValue = "${project.build.outputDirectory}")
     private File outputDirectory;
 
     /**
      * The name of the Application client JAR file to generate.
      */
-    @Parameter( defaultValue = "${project.build.finalName}" )
+    @Parameter(defaultValue = "${project.build.finalName}")
     private String jarName;
 
     /**
      * The files and directories to exclude from the main Application Client jar. Usage:
      * <p/>
-     * 
+     *
      * <pre>
      * &lt;excludes&gt;
      *   &lt;exclude&gt;**&#47;*DevOnly.class&lt;&#47;exclude&gt;
      * &lt;&#47;excludes&gt;
      * </pre>
-     * 
+     *
      * <br/>
      * Default exclusions: META-INF&#47;application-client.xml,
      */
@@ -104,13 +104,13 @@ public class AcrMojo
     /**
      * The Maven project.
      */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
     /**
      * The Jar archiver.
      */
-    @Component( role = Archiver.class, hint = "jar" )
+    @Component(role = Archiver.class, hint = "jar")
     private JarArchiver jarArchiver;
 
     /**
@@ -125,7 +125,7 @@ public class AcrMojo
      * Starting with <b>3.0.0</b> the property has been renamed from <code>acr.escapeBackslashesInFilePath</code> to
      * <code>maven.acr.escapeBackslashesInFilePath</code>.
      */
-    @Parameter( property = "maven.acr.escapeBackslashesInFilePath", defaultValue = "false" )
+    @Parameter(property = "maven.acr.escapeBackslashesInFilePath", defaultValue = "false")
     private boolean escapeBackslashesInFilePath;
 
     /**
@@ -133,14 +133,14 @@ public class AcrMojo
      * Starting with <b>3.0.0</b> the property has been renamed from <code>acr.escapeString</code> to
      * <code>maven.acr.escapeString</code>.
      */
-    @Parameter( property = "maven.acr.escapeString" )
+    @Parameter(property = "maven.acr.escapeString")
     private String escapeString;
 
     /**
      * To filter the deployment descriptor. Starting with <b>3.0.0</b> the property has been renamed from
      * <code>acr.filterDeploymentDescriptor</code> to <code>maven.acr.filterDeploymentDescriptor</code>.
      */
-    @Parameter( property = "maven.acr.filterDeploymentDescriptor", defaultValue = "false" )
+    @Parameter(property = "maven.acr.filterDeploymentDescriptor", defaultValue = "false")
     private boolean filterDeploymentDescriptor;
 
     /**
@@ -151,12 +151,12 @@ public class AcrMojo
 
     /**
      */
-    @Component( role = MavenFileFilter.class, hint = "default" )
+    @Component(role = MavenFileFilter.class, hint = "default")
     private MavenFileFilter mavenFileFilter;
 
     /**
      */
-    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
 
     /**
@@ -166,108 +166,95 @@ public class AcrMojo
      *
      * @since 3.2.0
      */
-    @Parameter( defaultValue = "${project.build.outputTimestamp}" )
+    @Parameter(defaultValue = "${project.build.outputTimestamp}")
     private String outputTimestamp;
 
     /** {@inheritDoc} */
-    public void execute()
-        throws MojoExecutionException
-    {
-        if ( getLog().isInfoEnabled() )
-        {
-            getLog().info( "Building JavaEE Application client: " + jarName );
+    public void execute() throws MojoExecutionException {
+        if (getLog().isInfoEnabled()) {
+            getLog().info("Building JavaEE Application client: " + jarName);
         }
 
-
-        File jarFile = getAppClientJarFile( basedir, jarName );
+        File jarFile = getAppClientJarFile(basedir, jarName);
 
         MavenArchiver archiver = new MavenArchiver();
 
-        archiver.setArchiver( jarArchiver );
+        archiver.setArchiver(jarArchiver);
 
-        archiver.setCreatedBy( "Maven ACR Plugin", "org.apache.maven.plugins", "maven-acr-plugin" );
+        archiver.setCreatedBy("Maven ACR Plugin", "org.apache.maven.plugins", "maven-acr-plugin");
 
-        archiver.setOutputFile( jarFile );
+        archiver.setOutputFile(jarFile);
 
         // configure for Reproducible Builds based on outputTimestamp value
-        archiver.configureReproducible( outputTimestamp );
+        archiver.configureReproducible(outputTimestamp);
 
-        try
-        {
+        try {
             String[] mainJarExcludes = DEFAULT_EXCLUDES;
 
-            if ( excludes != null && !excludes.isEmpty() )
-            {
-                excludes.add( APP_CLIENT_XML );
-                mainJarExcludes = excludes.toArray( new String[0] );
+            if (excludes != null && !excludes.isEmpty()) {
+                excludes.add(APP_CLIENT_XML);
+                mainJarExcludes = excludes.toArray(new String[0]);
             }
 
-            if ( outputDirectory.exists() )
-            {
-                archiver.getArchiver().addDirectory( outputDirectory, DEFAULT_INCLUDES, mainJarExcludes );
-            }
-            else
-            {
+            if (outputDirectory.exists()) {
+                archiver.getArchiver().addDirectory(outputDirectory, DEFAULT_INCLUDES, mainJarExcludes);
+            } else {
                 // CHECKSTYLE_OFF: LineLength
-                getLog().info( "JAR will only contain the META-INF/application-client.xml as no content was marked for inclusion" );
+                getLog().info(
+                                "JAR will only contain the META-INF/application-client.xml as no content was marked for inclusion");
                 // CHECKSTYLE_ON: LineLength
             }
 
-            File deploymentDescriptor = new File( outputDirectory, APP_CLIENT_XML );
+            File deploymentDescriptor = new File(outputDirectory, APP_CLIENT_XML);
 
-            if ( deploymentDescriptor.exists() )
-            {
-                if ( filterDeploymentDescriptor )
-                {
-                    getLog().debug( "Filtering deployment descriptor." );
+            if (deploymentDescriptor.exists()) {
+                if (filterDeploymentDescriptor) {
+                    getLog().debug("Filtering deployment descriptor.");
                     MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution();
-                    mavenResourcesExecution.setEscapeString( escapeString );
-                    List<FilterWrapper> filterWrappers =
-                        mavenFileFilter.getDefaultFilterWrappers( project, filters, escapeBackslashesInFilePath,
-                                                                  this.session, mavenResourcesExecution );
+                    mavenResourcesExecution.setEscapeString(escapeString);
+                    List<FilterWrapper> filterWrappers = mavenFileFilter.getDefaultFilterWrappers(
+                            project, filters, escapeBackslashesInFilePath, this.session, mavenResourcesExecution);
 
                     // Create a temporary file that we can copy-and-filter
-                    File unfilteredDeploymentDescriptor = new File( outputDirectory, APP_CLIENT_XML + ".unfiltered" );
-                    FileUtils.copyFile( deploymentDescriptor, unfilteredDeploymentDescriptor );
-                    mavenFileFilter.copyFile( unfilteredDeploymentDescriptor, deploymentDescriptor, true,
-                                              filterWrappers, getEncoding( unfilteredDeploymentDescriptor ) );
+                    File unfilteredDeploymentDescriptor = new File(outputDirectory, APP_CLIENT_XML + ".unfiltered");
+                    FileUtils.copyFile(deploymentDescriptor, unfilteredDeploymentDescriptor);
+                    mavenFileFilter.copyFile(
+                            unfilteredDeploymentDescriptor,
+                            deploymentDescriptor,
+                            true,
+                            filterWrappers,
+                            getEncoding(unfilteredDeploymentDescriptor));
                     // Remove the temporary file
-                    FileUtils.forceDelete( unfilteredDeploymentDescriptor );
+                    FileUtils.forceDelete(unfilteredDeploymentDescriptor);
                 }
-                archiver.getArchiver().addFile( deploymentDescriptor, APP_CLIENT_XML );
+                archiver.getArchiver().addFile(deploymentDescriptor, APP_CLIENT_XML);
             }
 
             // create archive
-            archiver.createArchive( session, project, archive );
+            archiver.createArchive(session, project, archive);
             // CHECKSTYLE_OFF: LineLength
-        }
-        catch ( ArchiverException e )
-        {
-            throw new MojoExecutionException( "There was a problem creating the JavaEE Application Client  archive: "
-                + e.getMessage(), e );
-        }
-        catch ( ManifestException e )
-        {
-            throw new MojoExecutionException( "There was a problem reading / creating the manifest for the JavaEE Application Client  archive: "
-                + e.getMessage(), e );
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "There was a I/O problem creating the JavaEE Application Client archive: "
-                + e.getMessage(), e );
-        }
-        catch ( DependencyResolutionRequiredException e )
-        {
-            throw new MojoExecutionException( "There was a problem resolving dependencies while creating the JavaEE Application Client archive: "
-                + e.getMessage(), e );
-        }
-        catch ( MavenFilteringException e )
-        {
-            throw new MojoExecutionException( "There was a problem filtering the deployment descriptor: "
-                + e.getMessage(), e );
+        } catch (ArchiverException e) {
+            throw new MojoExecutionException(
+                    "There was a problem creating the JavaEE Application Client  archive: " + e.getMessage(), e);
+        } catch (ManifestException e) {
+            throw new MojoExecutionException(
+                    "There was a problem reading / creating the manifest for the JavaEE Application Client  archive: "
+                            + e.getMessage(),
+                    e);
+        } catch (IOException e) {
+            throw new MojoExecutionException(
+                    "There was a I/O problem creating the JavaEE Application Client archive: " + e.getMessage(), e);
+        } catch (DependencyResolutionRequiredException e) {
+            throw new MojoExecutionException(
+                    "There was a problem resolving dependencies while creating the JavaEE Application Client archive: "
+                            + e.getMessage(),
+                    e);
+        } catch (MavenFilteringException e) {
+            throw new MojoExecutionException(
+                    "There was a problem filtering the deployment descriptor: " + e.getMessage(), e);
         }
 
-        project.getArtifact().setFile( jarFile );
+        project.getArtifact().setFile(jarFile);
 
         // CHECKSTYLE_ON: LineLength
     }
@@ -279,9 +266,8 @@ public class AcrMojo
      * @param finalName the name of the ear file
      * @return the Application client JAR file to generate
      */
-    private static File getAppClientJarFile( File basedir, String finalName )
-    {
-        return new File( basedir, finalName + ".jar" );
+    private static File getAppClientJarFile(File basedir, String finalName) {
+        return new File(basedir, finalName + ".jar");
     }
 
     /**
@@ -291,11 +277,8 @@ public class AcrMojo
      * @return The encoding of the XML-file, or UTF-8 if it's not specified in the file
      * @throws IOException if an error occurred while reading the file
      */
-    private String getEncoding( File xmlFile )
-        throws IOException
-    {
-        try ( XmlStreamReader xmlReader = new XmlStreamReader( xmlFile ) )
-        {
+    private String getEncoding(File xmlFile) throws IOException {
+        try (XmlStreamReader xmlReader = new XmlStreamReader(xmlFile)) {
             return xmlReader.getEncoding();
         }
     }
