@@ -126,11 +126,6 @@ under the License.
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-shared-utils</artifactId>
-      <version>3.4.2</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven.plugin-testing</groupId>
       <artifactId>maven-plugin-testing-harness</artifactId>
       <version>3.3.0</version>
@@ -145,7 +140,26 @@ under the License.
         <directory>src/main/filtered-resources</directory>
       </resource>
     </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>analyze</id>
+            <goals>
+              <goal>analyze-only</goal>
+            </goals>
+            <configuration>
+              <failOnWarning>true</failOnWarning>
+              <ignoredDependencies>org.apache.maven:maven-compat:*,org.apache.maven.plugin-testing:maven-plugin-testing-harness:*</ignoredDependencies>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
+
   <profiles>
     <profile>
       <id>run-its</id>
