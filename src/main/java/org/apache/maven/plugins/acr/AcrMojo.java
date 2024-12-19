@@ -18,6 +18,9 @@
  */
 package org.apache.maven.plugins.acr;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -29,7 +32,6 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -39,7 +41,6 @@ import org.apache.maven.shared.filtering.FilterWrapper;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
-import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.jar.ManifestException;
@@ -108,12 +109,6 @@ public class AcrMojo extends AbstractMojo {
     private MavenProject project;
 
     /**
-     * The Jar archiver.
-     */
-    @Component(role = Archiver.class, hint = "jar")
-    private JarArchiver jarArchiver;
-
-    /**
      * The archive configuration to use. See <a href="https://maven.apache.org/shared/maven-archiver/index.html">Maven
      * Archiver Reference</a>.
      */
@@ -149,13 +144,6 @@ public class AcrMojo extends AbstractMojo {
     @Parameter
     private List<String> filters;
 
-    /**
-     */
-    @Component(role = MavenFileFilter.class, hint = "default")
-    private MavenFileFilter mavenFileFilter;
-
-    /**
-     */
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
 
@@ -168,6 +156,19 @@ public class AcrMojo extends AbstractMojo {
      */
     @Parameter(defaultValue = "${project.build.outputTimestamp}")
     private String outputTimestamp;
+
+    /**
+     * The Jar archiver.
+     */
+    private final JarArchiver jarArchiver;
+
+    private final MavenFileFilter mavenFileFilter;
+
+    @Inject
+    public AcrMojo(JarArchiver jarArchiver, @Named("default") MavenFileFilter mavenFileFilter) {
+        this.jarArchiver = jarArchiver;
+        this.mavenFileFilter = mavenFileFilter;
+    }
 
     /** {@inheritDoc} */
     public void execute() throws MojoExecutionException {
