@@ -23,6 +23,7 @@ import javax.inject.Named;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.commons.io.input.XmlStreamReader;
@@ -187,7 +188,7 @@ public class AcrMojo extends AbstractMojo {
         archiver.setOutputFile(jarFile);
 
         // configure for Reproducible Builds based on outputTimestamp value
-        archiver.configureReproducible(outputTimestamp);
+        archiver.configureReproducibleBuild(outputTimestamp);
 
         try {
             String[] mainJarExcludes = DEFAULT_EXCLUDES;
@@ -224,7 +225,7 @@ public class AcrMojo extends AbstractMojo {
                             deploymentDescriptor,
                             true,
                             filterWrappers,
-                            getEncoding(unfilteredDeploymentDescriptor));
+                            getEncoding(unfilteredDeploymentDescriptor.toPath()));
                     // Remove the temporary file
                     FileUtils.forceDelete(unfilteredDeploymentDescriptor);
                 }
@@ -278,8 +279,9 @@ public class AcrMojo extends AbstractMojo {
      * @return The encoding of the XML-file, or UTF-8 if it's not specified in the file
      * @throws IOException if an error occurred while reading the file
      */
-    private String getEncoding(File xmlFile) throws IOException {
-        try (XmlStreamReader xmlReader = new XmlStreamReader(xmlFile)) {
+    private String getEncoding(Path xmlFile) throws IOException {
+        try (XmlStreamReader xmlReader =
+                XmlStreamReader.builder().setPath(xmlFile).get()) {
             return xmlReader.getEncoding();
         }
     }
