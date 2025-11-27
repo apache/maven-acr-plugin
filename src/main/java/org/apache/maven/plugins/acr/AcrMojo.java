@@ -42,13 +42,11 @@ import org.apache.maven.shared.filtering.FilterWrapper;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
-import org.codehaus.plexus.archiver.AbstractArchiver;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.jar.ManifestException;
+import org.codehaus.plexus.archiver.util.DefaultFileSet;
 import org.codehaus.plexus.util.FileUtils;
-
-import static org.codehaus.plexus.archiver.util.DefaultFileSet.fileSet;
 
 /**
  * Build a JavaEE Application Client jar file from the current project.
@@ -202,11 +200,11 @@ public class AcrMojo extends AbstractMojo {
             }
 
             if (outputDirectory.exists()) {
-                AbstractArchiver abstractArchiver = archiver.getArchiver();
-                abstractArchiver.addFileSet(fileSet(outputDirectory)
-                        .prefixed("")
-                        .includeExclude(DEFAULT_INCLUDES, mainJarExcludes)
-                        .includeEmptyDirs(true));
+                archiver.getArchiver()
+                        .addFileSet(DefaultFileSet.fileSet(outputDirectory)
+                                .prefixed("")
+                                .includeExclude(DEFAULT_INCLUDES, mainJarExcludes)
+                                .includeEmptyDirs(true));
             } else {
                 // CHECKSTYLE_OFF: LineLength
                 getLog().info(
@@ -244,10 +242,10 @@ public class AcrMojo extends AbstractMojo {
             // CHECKSTYLE_OFF: LineLength
         } catch (ArchiverException e) {
             throw new MojoExecutionException(
-                    "There was a problem creating the JavaEE Application Client  archive: " + e.getMessage(), e);
+                    "There was a problem creating the JavaEE Application Client archive: " + e.getMessage(), e);
         } catch (ManifestException e) {
             throw new MojoExecutionException(
-                    "There was a problem reading / creating the manifest for the JavaEE Application Client  archive: "
+                    "There was a problem reading / creating the manifest for the JavaEE Application Client archive: "
                             + e.getMessage(),
                     e);
         } catch (IOException e) {
