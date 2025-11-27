@@ -171,7 +171,9 @@ public class AcrMojo extends AbstractMojo {
         this.mavenFileFilter = mavenFileFilter;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void execute() throws MojoExecutionException {
         if (getLog().isInfoEnabled()) {
             getLog().info("Building JavaEE Application client: " + jarName);
@@ -276,7 +278,7 @@ public class AcrMojo extends AbstractMojo {
      * Get the encoding from an XML-file.
      *
      * @param xmlFile the XML-file
-     * @return The encoding of the XML-file, or UTF-8 if it's not specified in the file
+     * @return the encoding of the XML-file, or UTF-8 if it's not specified in the file
      * @throws IOException if an error occurred while reading the file
      */
     private String getEncoding(Path xmlFile) throws IOException {
