@@ -202,11 +202,11 @@ public class AcrMojo extends AbstractMojo {
             }
 
             if (outputDirectory.exists()) {
-              AbstractArchiver abstractArchiver = archiver.getArchiver();
-              abstractArchiver.addFileSet(fileSet(outputDirectory)
-                      .prefixed("")
-                      .includeExclude(DEFAULT_INCLUDES, mainJarExcludes)
-                      .includeEmptyDirs(true));
+                AbstractArchiver abstractArchiver = archiver.getArchiver();
+                abstractArchiver.addFileSet(fileSet(outputDirectory)
+                        .prefixed("")
+                        .includeExclude(DEFAULT_INCLUDES, mainJarExcludes)
+                        .includeEmptyDirs(true));
             } else {
                 // CHECKSTYLE_OFF: LineLength
                 getLog().info(
