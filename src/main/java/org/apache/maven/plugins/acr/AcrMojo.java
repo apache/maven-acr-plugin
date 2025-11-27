@@ -42,10 +42,13 @@ import org.apache.maven.shared.filtering.FilterWrapper;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
+import org.codehaus.plexus.archiver.AbstractArchiver;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.jar.ManifestException;
 import org.codehaus.plexus.util.FileUtils;
+
+import static org.codehaus.plexus.archiver.util.DefaultFileSet.fileSet;
 
 /**
  * Build a JavaEE Application Client jar file from the current project.
@@ -199,7 +202,11 @@ public class AcrMojo extends AbstractMojo {
             }
 
             if (outputDirectory.exists()) {
-                archiver.getArchiver().addDirectory(outputDirectory, DEFAULT_INCLUDES, mainJarExcludes);
+              AbstractArchiver abstractArchiver = archiver.getArchiver();
+              abstractArchiver.addFileSet(fileSet(outputDirectory)
+                      .prefixed("")
+                      .includeExclude(DEFAULT_INCLUDES, mainJarExcludes)
+                      .includeEmptyDirs(true));
             } else {
                 // CHECKSTYLE_OFF: LineLength
                 getLog().info(
