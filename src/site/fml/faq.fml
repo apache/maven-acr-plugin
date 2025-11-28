@@ -62,8 +62,7 @@ for more information about controlling the exact format of the generated class p
    <faq id="extensions">
      <question>Why the app-client packaging type is not recognized?</question>
      <answer>
-       <p>The app-client packaging type has been added as from Maven 3.0.4. If you are running an older version of Maven,
-       it does not know about that packaging type so you need to configure your project accordingly as follows:
+       <p>Maven does not know about that packaging type so you need to configure your project accordingly as follows:
        <source><![CDATA[
 <project>
   ...
