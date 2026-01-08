@@ -23,7 +23,7 @@ under the License.
   <parent>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-plugins</artifactId>
-    <version>45</version>
+    <version>46</version>
     <relativePath />
   </parent>
 
@@ -35,7 +35,7 @@ under the License.
   <description>Generates a J2EE Application Client file.</description>
 
   <prerequisites>
-    <maven>${mavenVersion}</maven>
+    <maven>3.6.3</maven>
   </prerequisites>
 
   <scm>
@@ -61,7 +61,7 @@ under the License.
 
   <properties>
     <javaVersion>8</javaVersion>
-    <mavenVersion>3.6.3</mavenVersion>
+    <mavenVersion>3.9.12</mavenVersion>
     <project.build.outputTimestamp>2025-11-25T18:11:53Z</project.build.outputTimestamp>
   </properties>
 
@@ -170,6 +170,10 @@ under the License.
                   <goal>clean</goal>
                   <goal>install</goal>
                 </goals>
+                <properties>
+                  <maven.compiler.source>${javaVersion}</maven.compiler.source>
+                  <maven.compiler.target>${javaVersion}</maven.compiler.target>
+                </properties>
               </configuration>
             </plugin>
           </plugins>
