@@ -23,7 +23,7 @@ under the License.
   <parent>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-plugins</artifactId>
-    <version>45</version>
+    <version>46</version>
     <relativePath />
   </parent>
 
@@ -35,7 +35,7 @@ under the License.
   <description>Generates a J2EE Application Client file.</description>
 
   <prerequisites>
-    <maven>${mavenVersion}</maven>
+    <maven>3.6.3</maven>
   </prerequisites>
 
   <scm>
@@ -61,7 +61,7 @@ under the License.
 
   <properties>
     <javaVersion>8</javaVersion>
-    <mavenVersion>3.6.3</mavenVersion>
+    <mavenVersion>3.9.12</mavenVersion>
     <project.build.outputTimestamp>2025-11-25T18:11:53Z</project.build.outputTimestamp>
   </properties>
 
@@ -120,12 +120,6 @@ under the License.
       <artifactId>commons-io</artifactId>
       <version>2.21.0</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-compat</artifactId>
-      <version>${mavenVersion}</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -147,7 +141,7 @@ under the License.
             </goals>
             <configuration>
               <failOnWarning>true</failOnWarning>
-              <ignoredDependencies>org.apache.maven:maven-compat:*,org.apache.maven.plugin-testing:maven-plugin-testing-harness:*</ignoredDependencies>
+              <ignoredDependencies>org.apache.maven.plugin-testing:maven-plugin-testing-harness:*</ignoredDependencies>
             </configuration>
           </execution>
         </executions>
@@ -164,12 +158,15 @@ under the License.
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-invoker-plugin</artifactId>
-              <version>3.9.1</version>
               <configuration>
                 <goals>
                   <goal>clean</goal>
                   <goal>install</goal>
                 </goals>
+                <properties>
+                  <maven.compiler.source>${javaVersion}</maven.compiler.source>
+                  <maven.compiler.target>${javaVersion}</maven.compiler.target>
+                </properties>
               </configuration>
             </plugin>
           </plugins>
