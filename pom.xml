@@ -120,12 +120,6 @@ under the License.
       <artifactId>commons-io</artifactId>
       <version>2.21.0</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-compat</artifactId>
-      <version>${mavenVersion}</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -147,7 +141,7 @@ under the License.
             </goals>
             <configuration>
               <failOnWarning>true</failOnWarning>
-              <ignoredDependencies>org.apache.maven:maven-compat:*,org.apache.maven.plugin-testing:maven-plugin-testing-harness:*</ignoredDependencies>
+              <ignoredDependencies>org.apache.maven.plugin-testing:maven-plugin-testing-harness:*</ignoredDependencies>
             </configuration>
           </execution>
         </executions>
