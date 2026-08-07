@@ -1,3 +1,11 @@
+---
+title: Using the app-client as a dependency
+author: 
+  - Pete Marvin King
+  - Stephane Nicoll
+date: 2011-03-26
+---
+
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
