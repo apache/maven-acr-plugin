@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+---
+title: Frequently Asked Questions
+---
 
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
@@ -19,18 +21,20 @@ specific language governing permissions and limitations
 under the License.
 -->
 
+<a id="top"></a>
 
-<faqs xmlns="http://maven.apache.org/FML/1.0.1"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
-  id="FAQ" title="Frequently Asked Questions">
-  <part id="General">
-    <faq id="How can I specify a Class-Path: entry in the manifest of an Application Client jar?">
-      <question>How can I specify a Class-Path: entry in the manifest of an Application Client jar?</question>
-      <answer>
-        <p>
-          You just have to configure it:
-          <source><![CDATA[
+# Frequently Asked Questions
+
+1. [How can I specify a Class-Path: entry in the manifest of an Application Client jar?](#How_can_I_specify_a_Class-Path.3A_entry_in_the_manifest_of_an_Application_Client_jar.3F)
+2. [Why the app-client packaging type is not recognized?](#extensions)
+
+<a id="How_can_I_specify_a_Class-Path.3A_entry_in_the_manifest_of_an_Application_Client_jar.3F"></a>
+
+### How can I specify a Class-Path: entry in the manifest of an Application Client jar?
+
+You just have to configure it:
+
+```xml
 <project>
   ...
   <build>
@@ -53,17 +57,18 @@ under the License.
   </build>
   ...
 </project>
-          ]]></source>
-Please see the <a href="/shared/maven-archiver/examples/classpath.html">Maven Archiver Reference</a>
-for more information about controlling the exact format of the generated class path entries.
-        </p>
-      </answer>
-    </faq>
-   <faq id="extensions">
-     <question>Why the app-client packaging type is not recognized?</question>
-     <answer>
-       <p>Maven does not know about that packaging type so you need to configure your project accordingly as follows:
-       <source><![CDATA[
+```
+
+Please see the [Maven Archiver Reference](/shared/maven-archiver/examples/classpath.html) for more
+information about controlling the exact format of the generated class path entries.
+
+<a id="extensions"></a>
+
+### Why the app-client packaging type is not recognized?
+
+Maven does not know about that packaging type so you need to configure your project accordingly as follows:
+
+```xml
 <project>
   ...
   <build>
@@ -79,10 +84,4 @@ for more information about controlling the exact format of the generated class p
   </build>
   ...
 </project>
-      ]]></source>
-
-       </p>
-     </answer>
-   </faq>
-  </part>
-</faqs>
+```
