@@ -28,8 +28,6 @@ under the License.
 1. [How can I specify a Class-Path: entry in the manifest of an Application Client jar?](#How_can_I_specify_a_Class-Path.3A_entry_in_the_manifest_of_an_Application_Client_jar.3F)
 2. [Why the app-client packaging type is not recognized?](#extensions)
 
-<a id="How_can_I_specify_a_Class-Path.3A_entry_in_the_manifest_of_an_Application_Client_jar.3F"></a>
-
 ### How can I specify a Class-Path: entry in the manifest of an Application Client jar?
 
 You just have to configure it:
