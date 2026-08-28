@@ -57,3 +57,6 @@ The ACR Plugin is used to package a JavaEE Application Client module. There are 
     ```shell
       mvn acr:acr
     ```
+
+The Java EE specification requires an Application Client to declare a `Main-Class` in its manifest.
+See the [FAQ](./faq.html) for how to configure that with Maven Archiver.
