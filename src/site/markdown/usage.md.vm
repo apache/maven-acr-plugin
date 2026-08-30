@@ -58,5 +58,58 @@ The ACR Plugin is used to package a JavaEE Application Client module. There are 
       mvn acr:acr
     ```
 
-The Java EE specification requires an Application Client to declare a `Main-Class` in its manifest.
-See the [FAQ](./faq.html) for how to configure that with Maven Archiver.
+## Manifest entries
+
+The plugin does not invent a default `Main-Class`. If you do not set
+`archive.manifest.mainClass` (and you do not supply a custom manifest that
+already has one), the generated jar has no `Main-Class` entry.
+
+The Java EE specification still requires an Application Client to declare a
+`Main-Class`. Configure Maven Archiver:
+
+```xml
+<project>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-acr-plugin</artifactId>
+        <version>${project.version}</version>
+        ...
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>fully.qualified.MainClass</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        ...
+      </plugin>
+    </plugins>
+  </build>
+  ...
+</project>
+```
+
+See [Make The Jar Executable](/shared/maven-archiver/examples/classpath.html)
+and [Using a Custom Manifest File](/shared/maven-archiver/examples/manifestFile.html).
+
+To generate a `Class-Path` entry:
+
+```xml
+<configuration>
+  <archive>
+    <manifest>
+      <addClasspath>true</addClasspath>
+    </manifest>
+  </archive>
+</configuration>
+```
+
+See the [Maven Archiver Reference](/shared/maven-archiver/examples/classpath.html)
+for the exact format of those entries.
+
+Maven does not know the `app-client` packaging type unless the plugin is
+loaded as an extension (`<extensions>true</extensions>`), as in the example
+above.
