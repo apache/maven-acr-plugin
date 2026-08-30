@@ -64,8 +64,13 @@ The plugin does not invent a default `Main-Class`. If you do not set
 `archive.manifest.mainClass` (and you do not supply a custom manifest that
 already has one), the generated jar has no `Main-Class` entry.
 
-The Java EE specification still requires an Application Client to declare a
-`Main-Class`. Configure Maven Archiver:
+Jakarta EE treats a jar as an application client module if it has a
+`Main-Class` manifest attribute *or* a `META-INF/application-client.xml`
+descriptor; `Main-Class` is not required.
+See the [Jakarta EE 11 platform spec](https://jakarta.ee/specifications/platform/11/jakarta-platform-spec-11.0#a3179).
+Some runtimes (GlassFish) also accept the main class as a launch argument.
+
+To put `Main-Class` in the manifest, configure Maven Archiver:
 
 ```xml
 <project>
