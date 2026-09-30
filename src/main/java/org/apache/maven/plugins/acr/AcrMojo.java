@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.input.XmlStreamReader;
@@ -198,8 +199,9 @@ public class AcrMojo extends AbstractMojo {
             String[] mainJarExcludes = DEFAULT_EXCLUDES;
 
             if (excludes != null && !excludes.isEmpty()) {
-                excludes.add(APP_CLIENT_XML);
-                mainJarExcludes = excludes.toArray(new String[0]);
+                List<String> allExcludes = new ArrayList<>(excludes);
+                allExcludes.add(APP_CLIENT_XML);
+                mainJarExcludes = allExcludes.toArray(new String[0]);
             }
 
             if (outputDirectory.exists()) {
