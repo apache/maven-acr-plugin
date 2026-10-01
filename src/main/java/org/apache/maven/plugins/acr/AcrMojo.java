@@ -23,7 +23,9 @@ import javax.inject.Named;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import org.apache.commons.io.input.XmlStreamReader;
@@ -46,7 +48,6 @@ import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.jar.ManifestException;
 import org.codehaus.plexus.archiver.util.DefaultFileSet;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Build a JavaEE Application Client jar file from the current project.
@@ -226,7 +227,11 @@ public class AcrMojo extends AbstractMojo {
 
                     // Create a temporary file that we can copy-and-filter
                     File unfilteredDeploymentDescriptor = new File(outputDirectory, APP_CLIENT_XML + ".unfiltered");
-                    FileUtils.copyFile(deploymentDescriptor, unfilteredDeploymentDescriptor);
+                    Files.copy(
+                            deploymentDescriptor.toPath(),
+                            unfilteredDeploymentDescriptor.toPath(),
+                            StandardCopyOption.REPLACE_EXISTING,
+                            StandardCopyOption.COPY_ATTRIBUTES);
                     mavenFileFilter.copyFile(
                             unfilteredDeploymentDescriptor,
                             deploymentDescriptor,
@@ -234,7 +239,7 @@ public class AcrMojo extends AbstractMojo {
                             filterWrappers,
                             getEncoding(unfilteredDeploymentDescriptor.toPath()));
                     // Remove the temporary file
-                    FileUtils.forceDelete(unfilteredDeploymentDescriptor);
+                    Files.deleteIfExists(unfilteredDeploymentDescriptor.toPath());
                 }
                 archiver.getArchiver().addFile(deploymentDescriptor, APP_CLIENT_XML);
             }
