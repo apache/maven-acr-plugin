@@ -146,7 +146,6 @@ under the License.
             </goals>
             <configuration>
               <failOnWarning>true</failOnWarning>
-              <ignoredDependencies>org.apache.maven.plugin-testing:maven-plugin-testing-harness:*</ignoredDependencies>
             </configuration>
           </execution>
         </executions>
