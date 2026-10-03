@@ -42,15 +42,17 @@ public final class AppClientLifecycleMappingProvider implements Provider<Lifecyc
     // The version-less form remains only as a fallback for running from unpackaged classes.
     private static final String ACR_GOAL = acrGoal();
 
+    // The other bindings follow Maven 3.9.x's own defaults for jar packaging; each of these versions
+    // still runs on Maven 3.6.3 and Java 8, this plugin's prerequisites.
     private static final String[] BINDINGS = {
-        "process-resources", "org.apache.maven.plugins:maven-resources-plugin:2.7:resources",
-        "compile", "org.apache.maven.plugins:maven-compiler-plugin:3.5.1:compile",
-        "process-test-resources", "org.apache.maven.plugins:maven-resources-plugin:2.7:testResources",
-        "test-compile", "org.apache.maven.plugins:maven-compiler-plugin:3.5.1:testCompile",
-        "test", "org.apache.maven.plugins:maven-surefire-plugin:2.18.1:test",
+        "process-resources", "org.apache.maven.plugins:maven-resources-plugin:3.4.0:resources",
+        "compile", "org.apache.maven.plugins:maven-compiler-plugin:3.15.0:compile",
+        "process-test-resources", "org.apache.maven.plugins:maven-resources-plugin:3.4.0:testResources",
+        "test-compile", "org.apache.maven.plugins:maven-compiler-plugin:3.15.0:testCompile",
+        "test", "org.apache.maven.plugins:maven-surefire-plugin:3.5.4:test",
         "package", ACR_GOAL,
-        "install", "org.apache.maven.plugins:maven-install-plugin:2.5.2:install",
-        "deploy", "org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy"
+        "install", "org.apache.maven.plugins:maven-install-plugin:3.1.4:install",
+        "deploy", "org.apache.maven.plugins:maven-deploy-plugin:3.1.4:deploy"
     };
 
     private final LifecycleMapping lifecycleMapping;
