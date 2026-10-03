@@ -22,10 +22,13 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.maven.lifecycle.mapping.Lifecycle;
 import org.apache.maven.lifecycle.mapping.LifecycleMapping;
@@ -34,15 +37,18 @@ import org.apache.maven.lifecycle.mapping.LifecyclePhase;
 @Singleton
 @Named("app-client")
 public final class AppClientLifecycleMappingProvider implements Provider<LifecycleMapping> {
-    // The maven-acr-plugin binding carries no version: this mapping is only loaded when the project
-    // declares the plugin, so the version always comes from the project's effective POM.
+    // The acr binding is pinned to this plugin's own version. Left version-less, a project that loads
+    // the plugin through <build><extensions> would run whatever version repository metadata resolves.
+    // The version-less form remains only as a fallback for running from unpackaged classes.
+    private static final String ACR_GOAL = acrGoal();
+
     private static final String[] BINDINGS = {
         "process-resources", "org.apache.maven.plugins:maven-resources-plugin:2.7:resources",
         "compile", "org.apache.maven.plugins:maven-compiler-plugin:3.5.1:compile",
         "process-test-resources", "org.apache.maven.plugins:maven-resources-plugin:2.7:testResources",
         "test-compile", "org.apache.maven.plugins:maven-compiler-plugin:3.5.1:testCompile",
         "test", "org.apache.maven.plugins:maven-surefire-plugin:2.18.1:test",
-        "package", "org.apache.maven.plugins:maven-acr-plugin:acr",
+        "package", ACR_GOAL,
         "install", "org.apache.maven.plugins:maven-install-plugin:2.5.2:install",
         "deploy", "org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy"
     };
@@ -81,6 +87,23 @@ public final class AppClientLifecycleMappingProvider implements Provider<Lifecyc
                 return phases;
             }
         };
+    }
+
+    private static String acrGoal() {
+        String resource = "/META-INF/maven/org.apache.maven.plugins/maven-acr-plugin/pom.properties";
+        try (InputStream in = AppClientLifecycleMappingProvider.class.getResourceAsStream(resource)) {
+            if (in != null) {
+                Properties properties = new Properties();
+                properties.load(in);
+                String version = properties.getProperty("version");
+                if (version != null) {
+                    return "org.apache.maven.plugins:maven-acr-plugin:" + version + ":acr";
+                }
+            }
+        } catch (IOException e) {
+            // fall through to the version-less binding
+        }
+        return "org.apache.maven.plugins:maven-acr-plugin:acr";
     }
 
     @Override
