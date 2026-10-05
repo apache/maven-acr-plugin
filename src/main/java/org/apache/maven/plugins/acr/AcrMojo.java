@@ -65,9 +65,6 @@ public class AcrMojo extends AbstractMojo {
 
     private static final String APP_CLIENT_XML = "META-INF/application-client.xml";
 
-    // TODO: will null work instead?
-    private static final String[] DEFAULT_INCLUDES = {"**/**"};
-
     private static final String[] DEFAULT_EXCLUDES = {APP_CLIENT_XML};
 
     /**
@@ -174,15 +171,11 @@ public class AcrMojo extends AbstractMojo {
         this.mavenFileFilter = mavenFileFilter;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void execute() throws MojoExecutionException {
-        if (getLog().isInfoEnabled()) {
-            getLog().info("Building JavaEE Application client: " + jarName);
-        }
+        getLog().info("Building JavaEE Application client: " + jarName);
 
-        File jarFile = getAppClientJarFile(basedir, jarName);
+        File jarFile = new File(basedir, jarName + ".jar");
 
         MavenArchiver archiver = new MavenArchiver();
 
@@ -208,13 +201,10 @@ public class AcrMojo extends AbstractMojo {
                 archiver.getArchiver()
                         .addFileSet(DefaultFileSet.fileSet(outputDirectory)
                                 .prefixed("")
-                                .includeExclude(DEFAULT_INCLUDES, mainJarExcludes)
+                                .includeExclude(null, mainJarExcludes)
                                 .includeEmptyDirs(true));
             } else {
-                // CHECKSTYLE_OFF: LineLength
-                getLog().info(
-                                "JAR will only contain the META-INF/application-client.xml as no content was marked for inclusion");
-                // CHECKSTYLE_ON: LineLength
+                getLog().info("No content to add: " + outputDirectory + " does not exist");
             }
 
             File deploymentDescriptor = new File(outputDirectory, APP_CLIENT_XML);
@@ -248,7 +238,6 @@ public class AcrMojo extends AbstractMojo {
 
             // create archive
             archiver.createArchive(session, project, archive);
-            // CHECKSTYLE_OFF: LineLength
         } catch (ArchiverException e) {
             throw new MojoExecutionException(
                     "There was a problem creating the JavaEE Application Client archive: " + e.getMessage(), e);
@@ -259,7 +248,7 @@ public class AcrMojo extends AbstractMojo {
                     e);
         } catch (IOException e) {
             throw new MojoExecutionException(
-                    "There was a I/O problem creating the JavaEE Application Client archive: " + e.getMessage(), e);
+                    "There was an I/O problem creating the JavaEE Application Client archive: " + e.getMessage(), e);
         } catch (DependencyResolutionRequiredException e) {
             throw new MojoExecutionException(
                     "There was a problem resolving dependencies while creating the JavaEE Application Client archive: "
@@ -271,19 +260,6 @@ public class AcrMojo extends AbstractMojo {
         }
 
         project.getArtifact().setFile(jarFile);
-
-        // CHECKSTYLE_ON: LineLength
-    }
-
-    /**
-     * Returns the App-client Jar file to generate.
-     *
-     * @param basedir the output directory
-     * @param finalName the name of the ear file
-     * @return the Application client JAR file to generate
-     */
-    private static File getAppClientJarFile(File basedir, String finalName) {
-        return new File(basedir, finalName + ".jar");
     }
 
     /**
