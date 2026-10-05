@@ -17,21 +17,10 @@
 
 # Contributing
 
-Bug reports, fixes and new features are welcome. To keep reviews quick:
+Read the [Maven developer guide](https://maven.apache.org/guides/development/guide-maven-development.html)
+before your first pull request. For this repository:
 
-- Discuss a new feature on the [dev mailing list](https://maven.apache.org/mailing-lists.html)
-  first, so you know it fits the project before you write it.
-- Report bugs in [GitHub Issues](https://github.com/apache/maven-acr-plugin/issues),
-  with the earliest affected version and steps to reproduce. Report security
-  issues privately, as [SECURITY.md](SECURITY.md) describes.
-- Open pull requests from a topic branch, in commits of logical units.
-- Add or update tests for your change, run `mvn spotless:apply` to format it,
-  and run `mvn -Prun-its verify` before you push.
-- Keep the diff minimal: leave unrelated formatting and import order alone,
-  and send a reformat as its own pull request.
-
-If you plan to contribute regularly, file an
-[Apache Individual Contributor License Agreement](https://www.apache.org/licenses/contributor-agreements.html#clas).
-
-More: [Maven developer guide](https://maven.apache.org/guides/development/guide-maven-development.html),
-[code conventions](https://maven.apache.org/developers/conventions/code.html).
+- Report bugs in [GitHub Issues](https://github.com/apache/maven-acr-plugin/issues);
+  report security issues privately as [SECURITY.md](SECURITY.md) describes.
+- Discuss new features on the [dev mailing list](https://maven.apache.org/mailing-lists.html) first.
+- Run `mvn spotless:apply` and `mvn -Prun-its verify` before you push.
