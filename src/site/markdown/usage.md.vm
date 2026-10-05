@@ -58,7 +58,7 @@ The ACR Plugin is used to package a JavaEE Application Client module. There are 
       mvn acr:acr
     ```
 
-## Manifest entries
+#[[## Manifest entries]]#
 
 The plugin does not invent a default `Main-Class`. If you do not set
 `archive.manifest.mainClass` (and you do not supply a custom manifest that

@@ -27,11 +27,12 @@ under the License.
 
 # Using the app-client as a dependency
 
-Once the ACR Plugin has been used to generate an application client, the generated artifact can be used as a dependency by specifying the the `type` as `app-client`.
+Once the ACR Plugin has been used to generate an application client, the generated artifact can be used as a dependency by specifying the `type` as `app-client`.
 
-## Normal way of adding an Application Client dependency
+#[[## Normal way of adding an Application Client dependency]]#
 
 The following dependency declaration would include the `application-client-project-1.0-SNAPSHOT.jar` in your project's package.
+The consuming project also has to load the ACR Plugin as an extension: Maven core does not define the `app-client` type, and without the plugin it looks for a file with an `.app-client` extension instead of `.jar`.
 
 ```xml
 <project>
@@ -44,6 +45,17 @@ The following dependency declaration would include the `application-client-proje
       <type>app-client</type>
     </dependency>
   </dependencies>
+  [...]
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-acr-plugin</artifactId>
+        <version>${project.version}</version>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+  </build>
   [...]
 </project>
 ```
