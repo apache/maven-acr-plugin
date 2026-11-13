@@ -40,9 +40,9 @@ Before submitting a PR, run `mvn spotless:apply` to format the files, then
 `mvn -Prun-its verify` to run the unit tests and the integration tests in
 `src/it`. Build with JDK 17 or 21.
 
-The plugin must keep working on Maven 3.6.3, the minimum declared in
+The plugin must keep working on Maven 3.9.0, the minimum declared in
 `<prerequisites>`, and on Maven 4. `mavenVersion` is only the API it compiles
-against, so do not use Maven APIs newer than 3.6.3. To run the integration
+against, so do not use Maven APIs newer than 3.9.0. To run the integration
 tests on another Maven, pass `-Dinvoker.mavenHome=<path>`.
 
 The `app-client` packaging and dependency type are JSR-330 components in
