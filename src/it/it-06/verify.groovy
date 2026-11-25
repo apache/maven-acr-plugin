@@ -28,6 +28,4 @@ def expected = [
     "maven-install-plugin:3.1.4:install"
 ]
 def missing = expected.findAll { !log.contains("org.apache.maven.plugins:" + it + " ") }
-if (!missing.isEmpty()) {
-    throw new AssertionError("Default bindings not used: " + missing)
-}
+assert missing.isEmpty() : "Default bindings not used: " + missing
