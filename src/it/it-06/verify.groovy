@@ -27,5 +27,7 @@ def expected = [
     "maven-surefire-plugin:3.5.4:test",
     "maven-install-plugin:3.1.4:install"
 ]
-def missing = expected.findAll { !log.contains("org.apache.maven.plugins:" + it + " ") }
+def missing = expected.findAll {
+    !log.contains("org.apache.maven.plugins:" + it + " ")
+}
 assert missing.isEmpty() : "Default bindings not used: " + missing

@@ -25,10 +25,7 @@ assert jarFile.isFile() : "FAILURE!"
 
 var jar = new JarFile(jarFile)
 
-var includedEntries = [
-    "META-INF/application-client.xml",
-    "org/apache/maven/plugin/acr/it/it02/SampleApp.class"
-]
+var includedEntries = ["META-INF/application-client.xml", "org/apache/maven/plugin/acr/it/it02/SampleApp.class"]
 for (String included : includedEntries) {
     println "Checking for existence of $included"
     assert jar.getEntry(included) != null : "FAILURE!"
@@ -37,12 +34,10 @@ for (String included : includedEntries) {
 jar.close()
 
 var bundleJarFile = new File(basedir, "bundle/target/maven-acr-plugin-it02-bundle-1.0.jar")
-var bundle = new JarFile(bundleJarFile);
+var bundle = new JarFile(bundleJarFile)
 
 
-var includedBundleEntries = [
-    "org/apache/maven/plugin/acr/it/it02/DependencyTest.class"
-]
+var includedBundleEntries = ["org/apache/maven/plugin/acr/it/it02/DependencyTest.class"]
 for (String included : includedBundleEntries) {
     println "Checking for existence of $included"
     assert bundle.getEntry(included) != null : "FAILURE!"

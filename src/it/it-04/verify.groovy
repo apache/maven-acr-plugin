@@ -29,7 +29,7 @@ var zipEntry = jarFile.getEntry("META-INF/application-client.xml")
 assert zipEntry != null : "FAILURE! Missing META-INF/application-client.xml in the JAR file"
 var is = jarFile.getInputStream(zipEntry)
 var contents = is.getText('UTF-8')
-var index = contents.indexOf("it04.key.value");
+var index = contents.indexOf("it04.key.value")
 assert index < 0 : "FAILURE! The key 'it04.key.value' has not been replaced during filtering"
 index = contents.indexOf("it04-success")
 assert index >= 0 : "FAILURE! The value 'it04-success' has not been injected during filtering"
