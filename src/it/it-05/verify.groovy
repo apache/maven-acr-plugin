@@ -22,7 +22,5 @@ def log = new File(basedir, "build.log").text
 
 // The lifecycle mapping must bind the acr goal to the loaded extension's version,
 // not to whatever version repository metadata resolves for a version-less binding.
-if (!log.contains(":" + version + ":acr (default-acr)")) {
-    throw new AssertionError("acr goal did not run at extension version " + version)
-}
+assert log.contains(":" + version + ":acr (default-acr)") : "acr goal did not run at extension version " + version
 assert new File(basedir, "target/maven-acr-plugin-it05-1.0.jar").isFile()

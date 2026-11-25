@@ -19,42 +19,25 @@
 
 import java.util.jar.JarFile
 
-try {
-    var jarFile = new File(basedir, "target/maven-acr-plugin-it01-1.0.jar")
-    println "Checking for existence of $jarFile"
-    if (!jarFile.isFile()) {
-        println "FAILURE!"
-        return false;
-    }
+var jarFile = new File(basedir, "target/maven-acr-plugin-it01-1.0.jar")
+println "Checking for existence of $jarFile"
+assert jarFile.isFile() : "FAILURE!"
 
-    var jar = new JarFile(jarFile)
+var jar = new JarFile(jarFile)
 
-    var includedEntries = [
-            "META-INF/application-client.xml",
-            "org/apache/maven/plugin/acr/it/it01/SampleApp.class"
-    ]
-    for (String included : includedEntries) {
-        println "Checking for existence of $included"
-        if (jar.getEntry(included) == null) {
-            println "FAILURE!"
-            return false
-        }
-    }
-
-    jar.close()
-
-    // Make sure that the jar has been added with a .jar extension
-    var localRepo = new File(basedir.getParentFile().getParentFile(), "local-repo")
-    var repoFile = new File(localRepo,
-            "/org/apache/maven/plugin/maven-acr-plugin-it01/1.0/maven-acr-plugin-it01-1.0.jar");
-    if (!repoFile.exists()) {
-        println "Jar file for application client not found in repo [" + repoFile.getAbsolutePath() + "]"
-        return false
-    }
-}
-catch (Throwable t) {
-    t.printStackTrace()
-    return false
+var includedEntries = [
+        "META-INF/application-client.xml",
+        "org/apache/maven/plugin/acr/it/it01/SampleApp.class"
+]
+for (String included : includedEntries) {
+    println "Checking for existence of $included"
+    assert jar.getEntry(included) != null : "FAILURE!"
 }
 
-return true
+jar.close()
+
+// Make sure that the jar has been added with a .jar extension
+var localRepo = new File(basedir.getParentFile().getParentFile(), "local-repo")
+var repoFile = new File(localRepo,
+        "/org/apache/maven/plugin/maven-acr-plugin-it01/1.0/maven-acr-plugin-it01-1.0.jar");
+assert repoFile.exists() : "Jar file for application client not found in repo [" + repoFile.getAbsolutePath() + "]"

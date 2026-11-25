@@ -17,46 +17,22 @@
  * under the License.
  */
 
-
-import org.codehaus.plexus.util.IOUtil
-
 import java.util.jar.JarFile
 
-try {
-    var file = new File(basedir, "target/maven-acr-plugin-it04-1.0.jar")
-    println "Checking for existence of $file"
-    if (!file.isFile()) {
-        println "FAILURE! Missing JAR file"
-        return false
-    }
+var file = new File(basedir, "target/maven-acr-plugin-it04-1.0.jar")
+println "Checking for existence of $file"
+assert file.isFile() : "FAILURE! Missing JAR file"
 
-    var jarFile = new JarFile(file)
+var jarFile = new JarFile(file)
 
-    var zipEntry = jarFile.getEntry("META-INF/application-client.xml")
-    if (zipEntry == null) {
-        println "FAILURE! Missing META-INF/application-client.xml in the JAR file"
-        return false
-    } else {
-        var is = jarFile.getInputStream(zipEntry)
-        var contents = IOUtil.toString(is, "UTF-8")
-        var index = contents.indexOf("it04.key.value");
-        if (index >= 0) {
-            println "FAILURE! The key 'it04.key.value' has not been replaced during filtering"
-            return false
-        }
-        index = contents.indexOf("it04-success")
-        if (index < 0) {
-            println "FAILURE! The value 'it04-success' has not been injected during filtering"
-            return false
-        }
-        is.close()
-    }
+var zipEntry = jarFile.getEntry("META-INF/application-client.xml")
+assert zipEntry != null : "FAILURE! Missing META-INF/application-client.xml in the JAR file"
+var is = jarFile.getInputStream(zipEntry)
+var contents = is.getText('UTF-8')
+var index = contents.indexOf("it04.key.value");
+assert index < 0 : "FAILURE! The key 'it04.key.value' has not been replaced during filtering"
+index = contents.indexOf("it04-success")
+assert index >= 0 : "FAILURE! The value 'it04-success' has not been injected during filtering"
+is.close()
 
-    jarFile.close()
-}
-catch (Throwable t) {
-    t.printStackTrace()
-    return false
-}
-
-return true
+jarFile.close()

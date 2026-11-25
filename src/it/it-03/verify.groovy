@@ -17,14 +17,11 @@
  * under the License.
  */
 
-import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
 var jarFile = new File(basedir, "target/maven-acr-plugin-it03-1.0.jar")
 println "Checking for existence of $jarFile"
-if (!jarFile.isFile()) {
-    throw new FileNotFoundException("Missing " + jarFile)
-}
+assert jarFile.isFile() : "Missing " + jarFile
 
 var zis = new ZipInputStream(new FileInputStream(jarFile))
 
@@ -42,8 +39,4 @@ while (true) {
 
 zis.close()
 
-if (count != 1) {
-    throw new IllegalStateException("Wrong number of application-client.xml's in archive: " + count)
-}
-
-return true
+assert count == 1 : "Wrong number of application-client.xml's in archive: " + count

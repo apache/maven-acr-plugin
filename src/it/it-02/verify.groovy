@@ -19,52 +19,33 @@
 
 import java.util.jar.JarFile
 
-try {
-    var jarFile = new File(basedir, "app-client/target/maven-acr-plugin-it02-app-client-1.0.jar")
-    println "Checking for existence of $jarFile"
-    if (!jarFile.isFile()) {
-        println "FAILURE!"
-        return false
-    }
+var jarFile = new File(basedir, "app-client/target/maven-acr-plugin-it02-app-client-1.0.jar")
+println "Checking for existence of $jarFile"
+assert jarFile.isFile() : "FAILURE!"
 
-    var jar = new JarFile(jarFile)
+var jar = new JarFile(jarFile)
 
-    var includedEntries = [
-        "META-INF/application-client.xml",
-        "org/apache/maven/plugin/acr/it/it02/SampleApp.class"
-    ]
-    for (String included : includedEntries) {
-        println "Checking for existence of $included"
-        if (jar.getEntry(included) == null) {
-            println "FAILURE!"
-            return false
-        }
-    }
-
-    jar.close()
-
-    var bundleJarFile = new File(basedir, "bundle/target/maven-acr-plugin-it02-bundle-1.0.jar")
-    var bundle = new JarFile(bundleJarFile);
-
-
-    var includedBundleEntries = [
-        "org/apache/maven/plugin/acr/it/it02/DependencyTest.class"
-    ]
-    for (String included : includedBundleEntries) {
-        println "Checking for existence of $included"
-        if (bundle.getEntry(included) == null) {
-            println "FAILURE!"
-            return false
-        }
-    }
-
-    bundle.close()
-
-
-}
-catch (Throwable t) {
-    t.printStackTrace()
-    return false
+var includedEntries = [
+    "META-INF/application-client.xml",
+    "org/apache/maven/plugin/acr/it/it02/SampleApp.class"
+]
+for (String included : includedEntries) {
+    println "Checking for existence of $included"
+    assert jar.getEntry(included) != null : "FAILURE!"
 }
 
-return true
+jar.close()
+
+var bundleJarFile = new File(basedir, "bundle/target/maven-acr-plugin-it02-bundle-1.0.jar")
+var bundle = new JarFile(bundleJarFile);
+
+
+var includedBundleEntries = [
+    "org/apache/maven/plugin/acr/it/it02/DependencyTest.class"
+]
+for (String included : includedBundleEntries) {
+    println "Checking for existence of $included"
+    assert bundle.getEntry(included) != null : "FAILURE!"
+}
+
+bundle.close()
