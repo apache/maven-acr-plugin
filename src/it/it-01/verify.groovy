@@ -25,10 +25,7 @@ assert jarFile.isFile() : "FAILURE!"
 
 var jar = new JarFile(jarFile)
 
-var includedEntries = [
-        "META-INF/application-client.xml",
-        "org/apache/maven/plugin/acr/it/it01/SampleApp.class"
-]
+var includedEntries = ["META-INF/application-client.xml", "org/apache/maven/plugin/acr/it/it01/SampleApp.class"]
 for (String included : includedEntries) {
     println "Checking for existence of $included"
     assert jar.getEntry(included) != null : "FAILURE!"
@@ -39,5 +36,5 @@ jar.close()
 // Make sure that the jar has been added with a .jar extension
 var localRepo = new File(basedir.getParentFile().getParentFile(), "local-repo")
 var repoFile = new File(localRepo,
-        "/org/apache/maven/plugin/maven-acr-plugin-it01/1.0/maven-acr-plugin-it01-1.0.jar");
+        "/org/apache/maven/plugin/maven-acr-plugin-it01/1.0/maven-acr-plugin-it01-1.0.jar")
 assert repoFile.exists() : "Jar file for application client not found in repo [" + repoFile.getAbsolutePath() + "]"
